@@ -1,7 +1,6 @@
 import { useState } from 'react'
 
-import { Link, routes } from '@redwoodjs/router'
-import { MetaTags } from '@redwoodjs/web'
+import { Metadata } from '@redwoodjs/web'
 
 import CategoriesCell from 'src/components/CategoriesCell'
 import HeroHeader from 'src/components/HeroHeader'
@@ -21,7 +20,7 @@ const LandingPage = () => {
 
   return (
     <NavLayout>
-      <MetaTags title="Landing" description="Landing page" />
+      <Metadata title="Landing" description="Landing page" />
       <HeroHeader />
 
       <section className="my-5 flex w-full justify-center md:px-10 lg:px-24">
