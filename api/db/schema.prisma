@@ -18,7 +18,7 @@ model Recipe {
   blurb      String?
   categoryId String?
   category   Category? @relation(fields: [categoryId], references: [id])
-  users User[]
+  users      User[]
 }
 
 model Category {

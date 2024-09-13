@@ -21,6 +21,7 @@ export const schema = gql`
     cuisine: String
     content: String!
     imageUrl: String
+    image: File
     blurb: String
     categoryId: String
   }
@@ -30,6 +31,7 @@ export const schema = gql`
     cuisine: String
     content: String
     imageUrl: String
+    image: File
     blurb: String
     categoryId: String
   }

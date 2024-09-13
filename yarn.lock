@@ -18265,6 +18265,7 @@ __metadata:
     "@redwoodjs/web": 8.1.1
     "@tailwindcss/typography": ^0.5.7
     autoprefixer: ^10.4.12
+    humanize-string: 2.1.0
     postcss: ^8.4.16
     postcss-loader: ^7.0.1
     prop-types: 15.8.1
