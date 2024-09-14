@@ -2,14 +2,32 @@ import type {
   CreateRecipeMutation,
   CreateRecipeInput,
   CreateRecipeMutationVariables,
+  FindCategories,
+  FindCategoriesVariables,
 } from 'types/graphql'
 
-import { navigate, routes } from '@redwoodjs/router'
+import { Link, navigate, routes } from '@redwoodjs/router'
 import { useMutation } from '@redwoodjs/web'
-import type { TypedDocumentNode } from '@redwoodjs/web'
+import type {
+  CellFailureProps,
+  CellSuccessProps,
+  TypedDocumentNode,
+} from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
 
 import RecipeForm from 'src/components/Admin/Recipe/RecipeForm'
+
+export const QUERY: TypedDocumentNode<
+  FindCategories,
+  FindCategoriesVariables
+> = gql`
+  query FindCategories {
+    categories {
+      id
+      name
+    }
+  }
+`
 
 const CREATE_RECIPE_MUTATION: TypedDocumentNode<
   CreateRecipeMutation,
@@ -22,7 +40,26 @@ const CREATE_RECIPE_MUTATION: TypedDocumentNode<
   }
 `
 
-const NewRecipe = () => {
+export const Loading = () => <div>Loading...</div>
+
+export const Empty = () => {
+  return (
+    <div className="rw-text-center">
+      No categories yet. You need at least one category to create a new recipe.{' '}
+      <Link to={routes.adminNewCategory()} className="rw-link">
+        Create a category?
+      </Link>
+    </div>
+  )
+}
+
+export const Failure = ({ error }: CellFailureProps<FindCategories>) => (
+  <div className="rw-cell-error">{error?.message}</div>
+)
+
+export const Success = ({
+  categories,
+}: CellSuccessProps<FindCategories, FindCategoriesVariables>) => {
   const [createRecipe, { loading, error }] = useMutation(
     CREATE_RECIPE_MUTATION,
     {
@@ -46,10 +83,13 @@ const NewRecipe = () => {
         <h2 className="rw-heading rw-heading-secondary">New Recipe</h2>
       </header>
       <div className="rw-segment-main">
-        <RecipeForm onSave={onSave} loading={loading} error={error} />
+        <RecipeForm
+          categories={categories}
+          onSave={onSave}
+          loading={loading}
+          error={error}
+        />
       </div>
     </div>
   )
 }
-
-export default NewRecipe

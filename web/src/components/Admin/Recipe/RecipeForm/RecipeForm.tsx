@@ -1,4 +1,8 @@
-import type { EditRecipeById, UpdateRecipeInput } from 'types/graphql'
+import type {
+  EditRecipeById,
+  FindCategories,
+  UpdateRecipeInput,
+} from 'types/graphql'
 
 import type { RWGqlError } from '@redwoodjs/forms'
 import {
@@ -8,12 +12,14 @@ import {
   Label,
   TextField,
   Submit,
+  SelectField,
 } from '@redwoodjs/forms'
 
 type FormRecipe = NonNullable<EditRecipeById['recipe']>
 
 interface RecipeFormProps {
   recipe?: EditRecipeById['recipe']
+  categories?: FindCategories['categories']
   onSave: (data: UpdateRecipeInput, id?: FormRecipe['id']) => void
   error: RWGqlError
   loading: boolean
@@ -126,16 +132,31 @@ const RecipeForm = (props: RecipeFormProps) => {
           className="rw-label"
           errorClassName="rw-label rw-label-error"
         >
-          Category id
+          Category
         </Label>
 
-        <TextField
-          name="categoryId"
-          defaultValue={props.recipe?.categoryId}
-          className="rw-input"
-          errorClassName="rw-input rw-input-error"
-          emptyAs={'undefined'}
-        />
+        {props.categories ? (
+          <SelectField
+            name="categoryId"
+            defaultValue={props.recipe?.categoryId}
+            className="rw-input"
+            errorClassName="rw-input rw-input-error"
+          >
+            {props.categories.map((category) => (
+              <option key={category.id} value={category.id}>
+                {category.name}
+              </option>
+            ))}
+          </SelectField>
+        ) : (
+          <TextField
+            name="categoryId"
+            defaultValue={props.recipe?.categoryId}
+            className="rw-input"
+            errorClassName="rw-input rw-input-error"
+            emptyAs={'undefined'}
+          />
+        )}
 
         <FieldError name="categoryId" className="rw-field-error" />
 
