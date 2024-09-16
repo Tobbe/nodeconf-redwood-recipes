@@ -4792,6 +4792,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@redwoodjs/storage@npm:8.1.1":
+  version: 8.1.1
+  resolution: "@redwoodjs/storage@npm:8.1.1"
+  dependencies:
+    "@redwoodjs/project-config": 8.1.1
+    mime-types: 2.1.35
+    ulid: 2.3.0
+  checksum: c86cfac657afbe740ea5f8fe893fe7eb44f97c2cc4da4db7d13565ec54b9c9293ed9b7b613a95dbcf60fbef5fa1f4984a66de302518c9839ead138784bed6f77
+  languageName: node
+  linkType: hard
+
 "@redwoodjs/structure@npm:8.1.1":
   version: 8.1.1
   resolution: "@redwoodjs/structure@npm:8.1.1"
@@ -6468,6 +6479,7 @@ __metadata:
     "@redwoodjs/api": 8.1.1
     "@redwoodjs/auth-dbauth-api": 8.1.1
     "@redwoodjs/graphql-server": 8.1.1
+    "@redwoodjs/storage": 8.1.1
   languageName: unknown
   linkType: soft
 
@@ -17661,6 +17673,15 @@ __metadata:
   version: 0.7.31
   resolution: "ua-parser-js@npm:0.7.31"
   checksum: 22ea7a73db4528f4b8c5e9ed3d711dfc005f9efa5e6f803e5b78bf358c1d81baaed2699fc1f35252a316f64f3fdf730919fa97e7cc1ae66d3011bd515a4a0f30
+  languageName: node
+  linkType: hard
+
+"ulid@npm:2.3.0":
+  version: 2.3.0
+  resolution: "ulid@npm:2.3.0"
+  bin:
+    ulid: ./bin/cli.js
+  checksum: 070d237502781085e59cf3d8ece752ff96cd3a0990cf1c1be57273f4550597daeb72e9a7db8e5a320de31102509bb3321d280b54bfc44e98025e4628a9629773
   languageName: node
   linkType: hard
 

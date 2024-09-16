@@ -21,7 +21,7 @@ export const QUERY: TypedDocumentNode<
   FindCategories,
   FindCategoriesVariables
 > = gql`
-  query FindCategories {
+  query CreateRecipeFindCategories {
     categories {
       id
       name
@@ -73,7 +73,12 @@ export const Success = ({
     }
   )
 
-  const onSave = (input: CreateRecipeInput) => {
+  const onSave = (formData: CreateRecipeInput) => {
+    const input = {
+      ...formData,
+      image: formData.image?.[0],
+    }
+
     createRecipe({ variables: { input } })
   }
 

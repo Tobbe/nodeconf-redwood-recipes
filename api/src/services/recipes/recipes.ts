@@ -5,6 +5,7 @@ import type {
 } from 'types/graphql'
 
 import { db } from 'src/lib/db'
+import { saveFiles } from 'src/lib/uploads'
 
 export const recipes: QueryResolvers['recipes'] = ({
   category,
@@ -32,9 +33,18 @@ export const recipe: QueryResolvers['recipe'] = ({ id }) => {
   })
 }
 
-export const createRecipe: MutationResolvers['createRecipe'] = ({ input }) => {
+export const createRecipe: MutationResolvers['createRecipe'] = async ({
+  input,
+}) => {
+  const processedInput = await saveFiles.forRecipe({
+    ...input,
+    imageUrl: input.image,
+  })
+
+  delete processedInput.image
+
   return db.recipe.create({
-    data: input,
+    data: processedInput,
   })
 }
 

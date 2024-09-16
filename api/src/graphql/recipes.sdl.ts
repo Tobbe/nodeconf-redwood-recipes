@@ -40,7 +40,7 @@ export const schema = gql`
     addToMyRecipes(id: String!): Recipe! @requireAuth
     # Admin mutations 👇
     createRecipe(input: CreateRecipeInput!): Recipe!
-      @requireAuth(roles: "ADMIN")
+      @requireAuth
     updateRecipe(id: String!, input: UpdateRecipeInput!): Recipe!
       @requireAuth(roles: "ADMIN")
     deleteRecipe(id: String!): Recipe! @requireAuth(roles: "ADMIN")

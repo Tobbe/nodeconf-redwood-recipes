@@ -6,6 +6,7 @@ import type {
 
 import type { RWGqlError } from '@redwoodjs/forms'
 import {
+  FileField,
   Form,
   FormError,
   FieldError,
@@ -109,6 +110,22 @@ const RecipeForm = (props: RecipeFormProps) => {
         />
 
         <FieldError name="imageUrl" className="rw-field-error" />
+
+        <Label
+          name="image"
+          className="rw-label"
+          errorClassName="rw-label rw-label-error"
+        >
+          Upload Image
+        </Label>
+
+        <FileField
+          name="image"
+          className="rw-input"
+          errorClassName="rw-input rw-input-error"
+        />
+
+        <FieldError name="image" className="rw-field-error" />
 
         <Label
           name="blurb"
