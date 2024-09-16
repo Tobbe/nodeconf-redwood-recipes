@@ -15,6 +15,7 @@ import {
   Submit,
   SelectField,
 } from '@redwoodjs/forms'
+import { isUploadedImage, makeUrl } from 'src/lib/images'
 
 type FormRecipe = NonNullable<EditRecipeById['recipe']> & {
   image: FileList
@@ -111,14 +112,6 @@ const RecipeForm = (props: RecipeFormProps) => {
 
   const onSubmit = (data: FormRecipe) => {
     props.onSave(data, props?.recipe?.id)
-  }
-
-  const isUploadedImage = (url?: string) => {
-    return (
-      url &&
-      !(url.startsWith('http://') || url.startsWith('https://')) &&
-      /\.(jpeg|jpg|gif|png)$/i.test(url)
-    )
   }
 
   return (
@@ -236,10 +229,7 @@ const RecipeForm = (props: RecipeFormProps) => {
         ))}
         {previews.length === 0 && isUploadedImage(props.recipe?.imageUrl) && (
           <img
-            src={`${global.RWJS_API_URL}/${props.recipe?.imageUrl?.replace(
-              'uploads/recipe-images',
-              'recipe-photos'
-            )}`}
+            src={makeUrl(props.recipe.imageUrl)}
             alt="Recipe Image"
             className="rw-image-preview"
           />

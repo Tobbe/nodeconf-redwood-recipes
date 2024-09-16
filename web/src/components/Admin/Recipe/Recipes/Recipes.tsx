@@ -11,6 +11,7 @@ import { toast } from '@redwoodjs/web/toast'
 
 import { QUERY } from 'src/components/Admin/Recipe/RecipesCell'
 import { timeTag, truncate } from 'src/lib/formatters'
+import { isUploadedImage, makeUrl } from 'src/lib/images'
 
 const DELETE_RECIPE_MUTATION: TypedDocumentNode<
   DeleteRecipeMutation,
@@ -22,6 +23,16 @@ const DELETE_RECIPE_MUTATION: TypedDocumentNode<
     }
   }
 `
+
+function image(urlOrPath?: string) {
+  if (!urlOrPath) {
+    return null
+  }
+
+  const url = isUploadedImage(urlOrPath) ? makeUrl(urlOrPath) : urlOrPath
+
+  return <img src={url} alt="recipe image" style={{ width: '100px' }} />
+}
 
 const RecipesList = ({ recipes }: FindRecipes) => {
   const [deleteRecipe] = useMutation(DELETE_RECIPE_MUTATION, {
@@ -68,7 +79,7 @@ const RecipesList = ({ recipes }: FindRecipes) => {
               <td>{truncate(recipe.cuisine)}</td>
               <td>{timeTag(recipe.createdAt)}</td>
               <td>{truncate(recipe.content)}</td>
-              <td>{truncate(recipe.imageUrl)}</td>
+              <td>{image(recipe.imageUrl)}</td>
               <td>{truncate(recipe.blurb)}</td>
               <td>{truncate(recipe.categoryId)}</td>
               <td>
