@@ -1,8 +1,8 @@
-import type {
-  EditRecipeById,
-  FindCategories,
-  UpdateRecipeInput,
-} from 'types/graphql'
+import React, { useCallback, useEffect, useState } from 'react'
+import { useDropzone } from 'react-dropzone'
+import type { DropEvent } from 'react-dropzone'
+
+import type { EditRecipeById, FindCategories } from 'types/graphql'
 
 import type { RWGqlError } from '@redwoodjs/forms'
 import {
@@ -16,17 +16,99 @@ import {
   SelectField,
 } from '@redwoodjs/forms'
 
-type FormRecipe = NonNullable<EditRecipeById['recipe']>
+type FormRecipe = NonNullable<EditRecipeById['recipe']> & {
+  image: FileList
+}
+
+class ManualEvent extends Event {
+  constructor(type: string, eventInit?: EventInit) {
+    super(type, eventInit)
+  }
+}
+
+function isManualEvent(event?: object): event is ManualEvent {
+  return (
+    event && 'nativeEvent' in event && event.nativeEvent instanceof ManualEvent
+  )
+}
 
 interface RecipeFormProps {
   recipe?: EditRecipeById['recipe']
   categories?: FindCategories['categories']
-  onSave: (data: UpdateRecipeInput, id?: FormRecipe['id']) => void
+  onSave: (data: FormRecipe, id?: FormRecipe['id']) => void
   error: RWGqlError
   loading: boolean
 }
 
 const RecipeForm = (props: RecipeFormProps) => {
+  const [previews, setPreviews] = useState([])
+
+  const onDropAccepted = useCallback(
+    (acceptedFiles: File[], event: DropEvent) => {
+      if (!inputRef.current) {
+        return
+      }
+
+      const dataTransfer = new DataTransfer()
+      const previews = []
+
+      acceptedFiles.forEach((file) => {
+        dataTransfer.items.add(file)
+        previews.push(URL.createObjectURL(file))
+      })
+
+      inputRef.current.files = dataTransfer.files
+
+      // Help Safari out
+      if (inputRef.current.webkitEntries.length) {
+        inputRef.current.dataset.file = `${dataTransfer.files[0].name}`
+      }
+
+      // Prevent an infinite loop by checking if the event is already a manual
+      // event
+      if (!isManualEvent(event)) {
+        // Let react-hook-forms know about the new files
+        inputRef.current?.dispatchEvent(
+          new ManualEvent('change', { bubbles: true })
+        )
+      }
+
+      setPreviews(previews)
+    },
+    []
+  )
+
+  const { getRootProps, getInputProps, rootRef, inputRef, open } = useDropzone({
+    accept: {
+      'image/*': ['.jpeg', '.jpg', '.gif', '.png'],
+    },
+    noClick: true,
+    multiple: false,
+    onDropAccepted,
+  })
+
+  useEffect(() => {
+    if (!rootRef.current) return
+
+    const handlePasteFile = async (event: ClipboardEvent) => {
+      if (event.clipboardData?.files) {
+        inputRef.current.files = event.clipboardData.files
+
+        // Trigger onDropAccepted and let react-hook-forms know about the new
+        // files
+        inputRef.current?.dispatchEvent(
+          new ManualEvent('change', { bubbles: true })
+        )
+      }
+    }
+
+    rootRef.current.addEventListener('paste', handlePasteFile)
+
+    return () => {
+      rootRef.current?.removeEventListener('paste', handlePasteFile)
+    }
+  }, [rootRef])
+
   const onSubmit = (data: FormRecipe) => {
     props.onSave(data, props?.recipe?.id)
   }
@@ -127,12 +209,32 @@ const RecipeForm = (props: RecipeFormProps) => {
           Upload Image
         </Label>
 
-        <FileField
-          name="image"
-          className="rw-input"
-          errorClassName="rw-input rw-input-error"
-        />
-        {isUploadedImage(props.recipe?.imageUrl) && (
+        <div {...getRootProps({ className: 'rw-input rw-drop-target' })}>
+          <FileField {...getInputProps({ name: 'image' })} />
+          <p>Drag and drop, or copy/paste an image here</p>
+          <button
+            type="button"
+            onClick={open}
+            className="rw-button rw-button-blue"
+          >
+            Open File Dialog
+          </button>
+        </div>
+
+        {previews.map((file) => (
+          <div className="rw-image-preview" key={file}>
+            <div>
+              <img
+                src={file}
+                // Revoke data uri after image is loaded
+                onLoad={() => {
+                  URL.revokeObjectURL(file)
+                }}
+              />
+            </div>
+          </div>
+        ))}
+        {previews.length === 0 && isUploadedImage(props.recipe?.imageUrl) && (
           <img
             src={`${global.RWJS_API_URL}/${props.recipe?.imageUrl?.replace(
               'uploads/recipe-images',

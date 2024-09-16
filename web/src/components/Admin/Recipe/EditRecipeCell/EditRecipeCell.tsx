@@ -69,9 +69,12 @@ export const Success = ({ recipe }: CellSuccessProps<EditRecipeById>) => {
   )
 
   const onSave = (
-    formData: UpdateRecipeInput,
+    formData: Omit<UpdateRecipeInput, 'image'> & { image?: FileList | null },
     id: EditRecipeById['recipe']['id']
   ) => {
+    console.log('formData', formData)
+    console.log('formData.image', formData.image)
+
     const input = {
       ...formData,
       image: formData.image?.[0],

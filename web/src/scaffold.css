@@ -402,3 +402,29 @@
   margin: 1rem 0;
   max-width: 240px;
 }
+
+.rw-image-preview > div {
+  display: 'flex';
+  minwidth: 0;
+  overflow: 'hidden';
+}
+
+.rw-image-preview img {
+  display: block;
+  width: auto;
+  height: 100%;
+  border-radius: 0.25rem;
+}
+
+.rw-drop-target {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  align-content: center;
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.rw-drop-target > .rw-button {
+  align-self: center;
+}
