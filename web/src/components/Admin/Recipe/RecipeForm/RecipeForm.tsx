@@ -31,6 +31,14 @@ const RecipeForm = (props: RecipeFormProps) => {
     props.onSave(data, props?.recipe?.id)
   }
 
+  const isUploadedImage = (url?: string) => {
+    return (
+      url &&
+      !(url.startsWith('http://') || url.startsWith('https://')) &&
+      /\.(jpeg|jpg|gif|png)$/i.test(url)
+    )
+  }
+
   return (
     <div className="rw-form-wrapper">
       <Form<FormRecipe> onSubmit={onSubmit} error={props.error}>
@@ -124,6 +132,16 @@ const RecipeForm = (props: RecipeFormProps) => {
           className="rw-input"
           errorClassName="rw-input rw-input-error"
         />
+        {isUploadedImage(props.recipe?.imageUrl) && (
+          <img
+            src={`${global.RWJS_API_URL}/${props.recipe?.imageUrl?.replace(
+              'uploads/recipe-images',
+              'recipe-photos'
+            )}`}
+            alt="Recipe Image"
+            className="rw-image-preview"
+          />
+        )}
 
         <FieldError name="image" className="rw-field-error" />
 

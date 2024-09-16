@@ -69,9 +69,14 @@ export const Success = ({ recipe }: CellSuccessProps<EditRecipeById>) => {
   )
 
   const onSave = (
-    input: UpdateRecipeInput,
+    formData: UpdateRecipeInput,
     id: EditRecipeById['recipe']['id']
   ) => {
+    const input = {
+      ...formData,
+      image: formData.image?.[0],
+    }
+
     updateRecipe({ variables: { id, input } })
   }
 

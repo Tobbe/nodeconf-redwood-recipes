@@ -42,7 +42,7 @@ export const schema = gql`
     createRecipe(input: CreateRecipeInput!): Recipe!
       @requireAuth
     updateRecipe(id: String!, input: UpdateRecipeInput!): Recipe!
-      @requireAuth(roles: "ADMIN")
-    deleteRecipe(id: String!): Recipe! @requireAuth(roles: "ADMIN")
+      @requireAuth
+    deleteRecipe(id: String!): Recipe! @requireAuth
   }
 `

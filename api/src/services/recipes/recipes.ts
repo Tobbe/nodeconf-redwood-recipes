@@ -48,12 +48,27 @@ export const createRecipe: MutationResolvers['createRecipe'] = async ({
   })
 }
 
-export const updateRecipe: MutationResolvers['updateRecipe'] = ({
+export const updateRecipe: MutationResolvers['updateRecipe'] = async ({
   id,
   input,
 }) => {
+  console.log('updateRecipe', { id, input })
+
+  const processedInput = input.image
+    ? await saveFiles.forRecipe({
+        ...input,
+        imageUrl: input.image,
+      })
+    : input
+
+  console.log('updateRecipe', { id, processedInput })
+
+  delete processedInput.image
+
+  console.log('updateRecipe after delete', { id, processedInput })
+
   return db.recipe.update({
-    data: input,
+    data: processedInput,
     where: { id },
   })
 }

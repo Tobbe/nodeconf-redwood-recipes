@@ -9,7 +9,7 @@ const uploadsConfig = createUploadsConfig({
 })
 
 export const fsStorage = new FileSystemStorage({
-  baseDir: './recipe-images',
+  baseDir: './uploads/recipe-images',
 })
 
 export const urlSigner = new UrlSigner({

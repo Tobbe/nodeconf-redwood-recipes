@@ -395,3 +395,10 @@
   font-weight: bold;
   margin-bottom: 1rem;
 }
+.rw-image-preview {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 1rem 0;
+  max-width: 240px;
+}

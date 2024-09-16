@@ -6477,6 +6477,7 @@ __metadata:
   resolution: "api@workspace:api"
   dependencies:
     "@redwoodjs/api": 8.1.1
+    "@redwoodjs/api-server": 8.1.1
     "@redwoodjs/auth-dbauth-api": 8.1.1
     "@redwoodjs/graphql-server": 8.1.1
     "@redwoodjs/storage": 8.1.1
